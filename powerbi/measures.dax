@@ -1,0 +1,40 @@
+// E-Commerce Profitability Analysis - DAX measures
+// Tables: ecommerce_orders (fact), Calendar (date table)
+
+// ---------- Date table ----------
+Calendar =
+ADDCOLUMNS (
+    CALENDAR ( DATE ( 2023, 1, 1 ), DATE ( 2024, 12, 31 ) ),
+    "Year",     YEAR ( [Date] ),
+    "Month No", MONTH ( [Date] ),
+    "Month",    FORMAT ( [Date], "mmm" )
+)
+
+// ---------- Core measures ----------
+Total Revenue   = SUM ( ecommerce_orders[Revenue] )
+Total Cost      = SUM ( ecommerce_orders[Cost] )
+Total Profit    = [Total Revenue] - [Total Cost]
+Profit Margin % = DIVIDE ( [Total Profit], [Total Revenue] )
+
+// ---------- Previous period ----------
+Revenue PP = CALCULATE ( [Total Revenue], DATEADD ( 'Calendar'[Date], -1, YEAR ) )
+Cost PP    = CALCULATE ( [Total Cost],    DATEADD ( 'Calendar'[Date], -1, YEAR ) )
+Profit PP  = CALCULATE ( [Total Profit],  DATEADD ( 'Calendar'[Date], -1, YEAR ) )
+Margin PP  = DIVIDE ( [Profit PP], [Revenue PP] )
+
+Revenue vs PP %    = DIVIDE ( [Total Revenue] - [Revenue PP], [Revenue PP] )
+Cost vs PP %       = DIVIDE ( [Total Cost] - [Cost PP], [Cost PP] )
+Profit vs PP %     = DIVIDE ( [Total Profit] - [Profit PP], [Profit PP] )
+Margin vs PP (pts) = ( [Profit Margin %] - [Margin PP] ) * 100
+
+// ---------- KPI labels ----------
+Revenue Delta Label = IF ( [Revenue vs PP %] >= 0, "▲ +", "▼ " ) & FORMAT ( [Revenue vs PP %], "0%" )
+Cost Delta Label    = IF ( [Cost vs PP %] >= 0, "▲ +", "▼ " ) & FORMAT ( [Cost vs PP %], "0%" )
+Profit Delta Label  = IF ( [Profit vs PP %] >= 0, "▲ +", "▼ " ) & FORMAT ( [Profit vs PP %], "0%" )
+Margin Delta Label  = IF ( [Margin vs PP (pts)] >= 0, "▲ +", "▼ " ) & FORMAT ( [Margin vs PP (pts)], "0.0" ) & "%"
+
+// ---------- Lakh formatting ----------
+Profit (Lakh)       = DIVIDE ( [Total Profit], 100000 )
+Revenue (Lakh)      = DIVIDE ( [Total Revenue], 100000 )
+Total Revenue Label = "₹ " & FORMAT ( [Revenue (Lakh)], "0.0" ) & "L"
+Total Profit Label  = "₹ " & FORMAT ( [Profit (Lakh)], "0.00" ) & "L"

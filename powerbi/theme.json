@@ -1,0 +1,19 @@
+{
+  "name": "Ecom Profitability",
+  "dataColors": ["#1E9BF0", "#FF9F40", "#2DB67C", "#FFC93C", "#9B6BE8", "#F4645F"],
+  "background": "#FFFFFF",
+  "foreground": "#1F2A44",
+  "tableAccent": "#0B2447",
+  "textClasses": {
+    "title":  { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#0B2447" },
+    "label":  { "fontFace": "Segoe UI", "fontSize": 9, "color": "#44506B" },
+    "callout": { "fontFace": "Segoe UI Semibold", "fontSize": 22, "color": "#0B2447" }
+  },
+  "visualStyles": {
+    "*": { "*": {
+      "title": [{ "show": true, "fontColor": { "solid": { "color": "#0B2447" } }, "fontSize": 12, "fontFamily": "Segoe UI Semibold" }],
+      "border": [{ "show": true, "color": { "solid": { "color": "#DCE4F0" } }, "radius": 8 }],
+      "background": [{ "show": true, "color": { "solid": { "color": "#FFFFFF" } } }]
+    } }
+  }
+}
